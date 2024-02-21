@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:go_router/go_router.dart';
+import 'package:todo_app/application/core/page_config.dart';
 import 'package:todo_app/application/pages/dashboard/dashboard_page.dart';
 import 'package:todo_app/application/pages/overview/overview_page.dart';
 import 'package:todo_app/application/pages/settings/settings_page.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key,
+  HomePage({
+    super.key,
     required String tab,
     // int? index
-    }): index = tabs.indexWhere((element) => element.name.toLowerCase() == tab);
-
+  }) : index = tabs.indexWhere((element) => element.name.toLowerCase() == tab);
+  static const PageConfig pageConfig = PageConfig(
+    icon: Icons.home,
+    name: 'Home',
+  );
   final int index;
 
   static const tabs = [
@@ -30,6 +35,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final themeData = ThemeData();
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Todo App'),
+      ),
       //backgroundColor: themeData.focusColor,
       body: SafeArea(
         child: AdaptiveLayout(
@@ -46,10 +54,9 @@ class _HomePageState extends State<HomePage> {
                     unselectedIconTheme: IconThemeData(
                         color: themeData.colorScheme.primary.withOpacity(0.5)),
                     onDestinationSelected: (index) {
-            debugPrint('tap $index selected');
-            _tapOnNavigationDestination(context, index);
-            },
-
+                      debugPrint('tap $index selected');
+                      _tapOnNavigationDestination(context, index);
+                    },
                     destinations: destinations
                         .map(
                           (_) => AdaptiveScaffold.toRailDestination(_),
@@ -81,14 +88,15 @@ class _HomePageState extends State<HomePage> {
             secondaryBody: SlotLayout(config: <Breakpoint, SlotLayoutConfig>{
               Breakpoints.mediumAndUp: SlotLayout.from(
                 key: const Key('secondary-body-medium'),
-                builder: AdaptiveScaffold.emptyBuilder,
+                builder: (_) => Placeholder(),
               )
             })),
       ),
     );
   }
 
-  void _tapOnNavigationDestination(BuildContext context, int index){
-    context.go('/home/${HomePage.tabs[index].name.toLowerCase()}');
+  void _tapOnNavigationDestination(BuildContext context, int index) {
+    context.goNamed(HomePage.pageConfig.name.toLowerCase(),
+        pathParameters: {'tab': HomePage.tabs[index].name.toLowerCase()});
   }
 }
