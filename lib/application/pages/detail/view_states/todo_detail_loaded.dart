@@ -14,7 +14,7 @@ class TodoDetailLoaded extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
-            itemCount: 0,
+            itemCount: entryIds.length,
             itemBuilder: (context, index) {
               return Text('$index');
             }),
