@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/application/components/view_states/todo_entry_item.dart';
 import 'package:todo_app/domain/entities/unique_id.dart';
 
 class TodoDetailLoaded extends StatelessWidget {
-  const TodoDetailLoaded({super.key, required this.entryIds, required this.collectionId});
+  const TodoDetailLoaded(
+      {super.key, required this.entryIds, required this.collectionId});
 
   final List<EntryId> entryIds;
   final CollectionId collectionId;
-
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,8 @@ class TodoDetailLoaded extends StatelessWidget {
         child: ListView.builder(
             itemCount: entryIds.length,
             itemBuilder: (context, index) {
-              return Text('$index');
+              return TodoEntryItemProvider(
+                  collectionId: collectionId, entryId: entryIds[index]);
             }),
       ),
     );
