@@ -14,7 +14,6 @@ class TodoOverviewLoaded extends StatelessWidget {
           final item = collections[index];
           final colorScheme = Theme.of(context);
           return ListTile(
-            tileColor: colorScheme.secondaryHeaderColor,
             selectedTileColor: colorScheme.primaryColor,
             iconColor: item.color.color,
             selectedColor: item.color.color,

@@ -88,7 +88,16 @@ class _HomePageState extends State<HomePage> {
             secondaryBody: SlotLayout(config: <Breakpoint, SlotLayoutConfig>{
               Breakpoints.mediumAndUp: SlotLayout.from(
                 key: const Key('secondary-body-medium'),
-                builder: (_) => Placeholder(),
+                builder: (_) => Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.centerRight,
+                          end: Alignment.centerLeft,
+                          colors: [
+                            Theme.of(context).primaryColor.withOpacity(0.7),
+                            Theme.of(context).primaryColor.withOpacity(0.4)
+                          ])),
+                ),
               )
             })),
       ),
