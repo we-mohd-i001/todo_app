@@ -24,3 +24,12 @@ class TodoEntryIdsParam extends Params {
   @override
   List<Object> get props => [collectionId, entryId];
 }
+
+class CollectionIdParam extends Params {
+  final CollectionId collectionId;
+
+  CollectionIdParam({required this.collectionId}) : super();
+
+  @override
+  List<Object> get props => [collectionId];
+}
