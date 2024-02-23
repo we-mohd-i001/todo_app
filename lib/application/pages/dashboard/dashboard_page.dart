@@ -9,8 +9,17 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder(
+    return Container(
       color: Colors.cyan,
+      child: const Center(
+        child: Card(
+          color: Colors.cyanAccent,
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('The Dashboard'),
+          ),
+        ),
+      ),
     );
   }
 }
