@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:todo_app/application/core/page_config.dart';
 import 'package:todo_app/application/pages/detail/bloc/todo_detail_cubit.dart';
 import 'package:todo_app/application/pages/detail/view_states/todo_detail_error.dart';
@@ -51,10 +49,6 @@ class TodoDetailPage extends StatelessWidget {
       ),
       child: BlocBuilder<TodoDetailCubit, TodoDetailState>(
           builder: (context, state) {
-            bool check = Breakpoints.mediumAndUp == true;
-        if (check) {
-          context.pop();
-        }
         if (state is TodoDetailStateLoading) {
           return const TodoDetailLoading();
         } else if (state is TodoDetailStateLoaded) {
