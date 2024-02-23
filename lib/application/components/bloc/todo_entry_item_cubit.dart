@@ -7,6 +7,7 @@ import 'package:todo_app/domain/entities/todo_entry.dart';
 import 'package:todo_app/domain/entities/unique_id.dart';
 import 'package:todo_app/domain/failures/failures.dart';
 import 'package:todo_app/domain/use_cases/load_todo_entry.dart';
+import 'package:todo_app/domain/use_cases/update_todo_entry.dart';
 
 part 'todo_entry_item_state.dart';
 
@@ -14,8 +15,9 @@ class TodoEntryItemCubit extends Cubit<TodoEntryItemState> {
   final EntryId entryId;
   final CollectionId collectionId;
   final LoadTodoEntry loadTodoEntry;
-  // final UpdateTodoEntry updateTodoEntry;
+  final UpdateTodoEntry updateTodoEntry;
   TodoEntryItemCubit({
+    required this.updateTodoEntry,
     required this.entryId,
     required this.collectionId,
     required this.loadTodoEntry,
@@ -38,6 +40,13 @@ class TodoEntryItemCubit extends Cubit<TodoEntryItemState> {
   }
 
   Future<void> update() async {
-    throw UnimplementedError();
+    try {
+      final updatedEntry = await updateTodoEntry.call(
+          TodoEntryIdsParam(collectionId: collectionId, entryId: entryId));
+      return updatedEntry.fold((left) => emit(TodoEntryItemStateError()),
+          (right) => emit(TodoEntryItemStateLoaded(todoEntry: right)));
+    } on Exception {
+      emit(TodoEntryItemStateError());
+    }
   }
 }
