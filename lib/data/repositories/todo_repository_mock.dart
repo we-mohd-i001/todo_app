@@ -59,4 +59,20 @@ class TodoRepositoryMock implements TodoRepository {
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));
     }
   }
+
+  @override
+  Future<Either<Failure, TodoEntry>> updateTodoEntry(
+      {required CollectionId collectionId, required EntryId entryId}) async {
+    try {
+      final index = todoEntries.indexWhere((element) => element.id == entryId);
+      final entryToUpdate = todoEntries[index];
+      final updateEntry =
+          todoEntries[index].copyWith(isDone: !entryToUpdate.isDone);
+      todoEntries[index] = updateEntry;
+      return Future.delayed(
+          const Duration(milliseconds: 400), () => Right(updateEntry));
+    } on Exception catch (e) {
+      return Left(ServerFailure(stackTrace: e.toString()));
+    }
+  }
 }
