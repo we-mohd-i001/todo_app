@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/application/core/go_router_observer.dart';
 import 'package:todo_app/application/pages/dashboard/dashboard_page.dart';
 import 'package:todo_app/application/pages/detail/todo_detail_page.dart';
+import 'package:todo_app/application/pages/home/bloc/navigation_todo_cubit.dart';
 import 'package:todo_app/application/pages/home/home_page.dart';
 import 'package:todo_app/application/pages/overview/overview_page.dart';
 import 'package:todo_app/application/pages/settings/settings_page.dart';
@@ -48,28 +50,38 @@ final routes = GoRouter(
           name: TodoDetailPage.pageConfig.name.toLowerCase(),
           path: '$_basePath/overview/:collectionId',
           builder: (context, state) {
-            return Scaffold(
-              appBar: AppBar(
-                leading: BackButton(
-                  onPressed: () {
-                    if (context.canPop()) {
-                      context.pop();
-                    } else {
-                      context.goNamed(
-                        HomePage.pageConfig.name.toLowerCase(),
-                        pathParameters: {
-                          'tab': OverviewPage.pageConfig.name.toLowerCase()
-                        },
-                      );
-                    }
-                  },
+            return BlocListener<NavigationTodoCubit, NavigationTodoState>(
+              listenWhen: (previous, current) =>
+                  previous.isSecondaryBodyDisplayed !=
+                  current.isSecondaryBodyDisplayed,
+              listener: (context, state) {
+                if(context.canPop() && (state.isSecondaryBodyDisplayed ?? false)){
+                  context.pop();
+                }
+              },
+              child: Scaffold(
+                appBar: AppBar(
+                  leading: BackButton(
+                    onPressed: () {
+                      if (context.canPop()) {
+                        context.pop();
+                      } else {
+                        context.goNamed(
+                          HomePage.pageConfig.name.toLowerCase(),
+                          pathParameters: {
+                            'tab': OverviewPage.pageConfig.name.toLowerCase()
+                          },
+                        );
+                      }
+                    },
+                  ),
+                  title: const Text('Details'),
                 ),
-                title: const Text('Details'),
-              ),
-              body: Center(
-                child: TodoDetailPageProvider(
-                  collectionId: CollectionId.fromUniqueString(
-                      state.pathParameters['collectionId'] ?? ''),
+                body: Center(
+                  child: TodoDetailPageProvider(
+                    collectionId: CollectionId.fromUniqueString(
+                        state.pathParameters['collectionId'] ?? ''),
+                  ),
                 ),
               ),
             );

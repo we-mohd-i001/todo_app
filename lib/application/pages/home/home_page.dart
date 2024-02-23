@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/application/core/page_config.dart';
 import 'package:todo_app/application/pages/dashboard/dashboard_page.dart';
+import 'package:todo_app/application/pages/detail/todo_detail_page.dart';
+import 'package:todo_app/application/pages/home/bloc/navigation_todo_cubit.dart';
 import 'package:todo_app/application/pages/overview/overview_page.dart';
 import 'package:todo_app/application/pages/settings/settings_page.dart';
+
+class HomePageProvider extends StatelessWidget {
+  final String tab;
+  const HomePageProvider({super.key, required this.tab});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<NavigationTodoCubit>(
+      create: (_) => NavigationTodoCubit(),
+      child: HomePage(tab: tab),
+    );
+  }
+}
 
 class HomePage extends StatefulWidget {
   HomePage({
@@ -35,9 +51,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final themeData = ThemeData();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Todo App'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Todo App'),
+      // ),
       //backgroundColor: themeData.focusColor,
       body: SafeArea(
         child: AdaptiveLayout(
@@ -81,23 +97,62 @@ class _HomePageState extends State<HomePage> {
             body: SlotLayout(
               config: <Breakpoint, SlotLayoutConfig>{
                 Breakpoints.smallAndUp: SlotLayout.from(
-                    key: const Key('primary-body-small'),
-                    builder: (_) => HomePage.tabs[widget.index].child)
+                  key: const Key('primary-body-small'),
+                  builder: (_) => HomePage.tabs[widget.index].child,
+                )
               },
             ),
             secondaryBody: SlotLayout(config: <Breakpoint, SlotLayoutConfig>{
               Breakpoints.mediumAndUp: SlotLayout.from(
                 key: const Key('secondary-body-medium'),
-                builder: (_) => Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.centerRight,
-                          end: Alignment.centerLeft,
-                          colors: [
-                            Theme.of(context).primaryColor.withOpacity(0.7),
-                            Theme.of(context).primaryColor.withOpacity(0.4)
-                          ])),
-                ),
+                builder: widget.index != 1
+                    ? null
+                    : (_) => Container(
+                          // decoration: BoxDecoration(
+                          //   gradient: LinearGradient(
+                          //     begin: Alignment.centerRight,
+                          //     end: Alignment.centerLeft,
+                          //     colors: [
+                          //       Theme.of(context).primaryColor.withOpacity(0.7),
+                          //       Theme.of(context).primaryColor.withOpacity(0.4),
+                          //     ],
+                          //   ),
+                          // ),
+                          child: BlocBuilder<NavigationTodoCubit,
+                              NavigationTodoState>(
+                            builder: (context, state) {
+                              final isSecondaryBodyDisplayed =
+                                  Breakpoints.mediumAndUp.isActive(context);
+                              context
+                                  .read<NavigationTodoCubit>()
+                                  .secondaryBodyHasChanged(
+                                      isSecondaryBodyDisplayed:
+                                          isSecondaryBodyDisplayed);
+                              final selectedId = state.selectedCollectionId;
+                              if (selectedId == null) {
+                                return Container(
+                                    decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.centerRight,
+                                    end: Alignment.centerLeft,
+                                    colors: [
+                                      Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(0.7),
+                                      Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(0.4),
+                                    ],
+                                  ),
+                                ));
+                              }
+                              return TodoDetailPageProvider(
+                                key: Key(selectedId.value),
+                                collectionId: selectedId,
+                              );
+                            },
+                          ),
+                        ),
               )
             })),
       ),

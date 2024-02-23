@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/application/components/view_states/todo_entry_item.dart';
+import 'package:todo_app/application/components/todo_entry_item.dart';
 import 'package:todo_app/domain/entities/unique_id.dart';
 
 class TodoDetailLoaded extends StatelessWidget {
