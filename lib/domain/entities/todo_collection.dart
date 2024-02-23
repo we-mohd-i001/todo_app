@@ -7,6 +7,12 @@ class TodoCollection {
   final TodoColor color;
 
   TodoCollection({required this.id, required this.title, required this.color});
+
+  TodoCollection copyWith({String? title, TodoColor? color}) {
+    return TodoCollection(
+        id: id, title: title ?? this.title, color: color ?? this.color);
+  }
+
   factory TodoCollection.empty() {
     return TodoCollection(
       id: CollectionId(),

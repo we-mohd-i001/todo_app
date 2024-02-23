@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/application/core/go_router_observer.dart';
+import 'package:todo_app/application/pages/create_todo_collection/create_todo_collection_page.dart';
 import 'package:todo_app/application/pages/dashboard/dashboard_page.dart';
 import 'package:todo_app/application/pages/detail/todo_detail_page.dart';
 import 'package:todo_app/application/pages/home/bloc/navigation_todo_cubit.dart';
@@ -47,6 +48,33 @@ final routes = GoRouter(
         ],
       ),
       GoRoute(
+        name: CreateTodoCollectionPage.pageConfig.name.toLowerCase(),
+        path:
+            '$_basePath/overview/${CreateTodoCollectionPage.pageConfig.name.toLowerCase()}',
+        builder: (context, state) => Scaffold(
+          appBar: AppBar(
+            leading: BackButton(
+              onPressed: () {
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.goNamed(
+                    HomePage.pageConfig.name.toLowerCase(),
+                    pathParameters: {
+                      'tab': OverviewPage.pageConfig.name.toLowerCase()
+                    },
+                  );
+                }
+              },
+            ),
+            title: const Text('Create Todo Collection'),
+          ),
+          body: const SafeArea(
+            child: CreateTodoCollectionPageProvider(),
+          ),
+        ),
+      ),
+      GoRoute(
           name: TodoDetailPage.pageConfig.name.toLowerCase(),
           path: '$_basePath/overview/:collectionId',
           builder: (context, state) {
@@ -55,7 +83,8 @@ final routes = GoRouter(
                   previous.isSecondaryBodyDisplayed !=
                   current.isSecondaryBodyDisplayed,
               listener: (context, state) {
-                if(context.canPop() && (state.isSecondaryBodyDisplayed ?? false)){
+                if (context.canPop() &&
+                    (state.isSecondaryBodyDisplayed ?? false)) {
                   context.pop();
                 }
               },
