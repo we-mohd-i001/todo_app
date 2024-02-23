@@ -69,8 +69,8 @@ final routes = GoRouter(
             ),
             title: const Text('Create Todo Collection'),
           ),
-          body: SafeArea(
-            child: CreateTodoCollectionPage.pageConfig.child,
+          body: const SafeArea(
+            child: CreateTodoCollectionPageProvider(),
           ),
         ),
       ),

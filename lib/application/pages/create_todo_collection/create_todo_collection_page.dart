@@ -4,13 +4,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/application/core/page_config.dart';
 import 'package:todo_app/application/pages/create_todo_collection/bloc/create_todo_collection_page_cubit.dart';
 import 'package:todo_app/domain/entities/todo_color.dart';
+import 'package:todo_app/domain/repositories/todo_repository.dart';
+import 'package:todo_app/domain/use_cases/create_todo_collection.dart';
 
 class CreateTodoCollectionPageProvider extends StatelessWidget {
   const CreateTodoCollectionPageProvider({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const CreateTodoCollectionPage();
+    return BlocProvider<CreateTodoCollectionPageCubit>(
+      create: (context) => CreateTodoCollectionPageCubit(
+        createTodoCollection: CreateTodoCollection(
+          todoRepository: RepositoryProvider.of<TodoRepository>(context),
+        ),
+      ),
+      child: const CreateTodoCollectionPage(),
+    );
   }
 }
 
@@ -61,7 +70,7 @@ class _CreateTodoCollectionPageState extends State<CreateTodoCollectionPage> {
                   if (parseColorIndex == null ||
                       parseColorIndex < 0 ||
                       parseColorIndex > TodoColor.predefinedColors.length) {
-                    return 'Only numbers between and ${TodoColor.predefinedColors.length - 1} are allowed';
+                    return 'Only numbers between 0 and ${TodoColor.predefinedColors.length - 1} are allowed';
                   }
                 }
                 return null;

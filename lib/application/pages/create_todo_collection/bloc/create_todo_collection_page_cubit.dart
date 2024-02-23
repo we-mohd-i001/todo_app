@@ -13,12 +13,11 @@ class CreateTodoCollectionPageCubit
   final CreateTodoCollection createTodoCollection;
   CreateTodoCollectionPageCubit({required this.createTodoCollection})
       : super(CreateTodoCollectionPageState());
-
-  void titleChanged(String title) {
+  void titleChanged(String? title) {
     emit(state.copyWith(title: title));
   }
 
-  void colorChanged(String color) {
+  void colorChanged(String? color) {
     emit(state.copyWith(color: color));
   }
 
