@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/application/core/page_config.dart';
 import 'package:todo_app/application/pages/detail/bloc/todo_detail_cubit.dart';
-import 'package:todo_app/application/pages/detail/view_states/to_detail_error.dart';
+import 'package:todo_app/application/pages/detail/view_states/todo_detail_error.dart';
 import 'package:todo_app/application/pages/detail/view_states/todo_detail_loaded.dart';
 import 'package:todo_app/application/pages/detail/view_states/todo_detail_loading.dart';
 import 'package:todo_app/domain/entities/unique_id.dart';
