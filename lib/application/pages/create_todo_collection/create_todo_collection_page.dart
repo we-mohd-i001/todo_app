@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/application/core/page_config.dart';
+import 'package:todo_app/application/pages/create_todo_collection/bloc/create_todo_collection_page_cubit.dart';
 import 'package:todo_app/domain/entities/todo_color.dart';
 
 class CreateTodoCollectionPageProvider extends StatelessWidget {
@@ -37,6 +39,9 @@ class _CreateTodoCollectionPageState extends State<CreateTodoCollectionPage> {
         child: Column(
           children: [
             TextFormField(
+              onChanged: (value) => context
+                  .read<CreateTodoCollectionPageCubit>()
+                  .titleChanged(value),
               decoration: const InputDecoration(labelText: 'Title'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -46,6 +51,9 @@ class _CreateTodoCollectionPageState extends State<CreateTodoCollectionPage> {
               },
             ),
             TextFormField(
+              onChanged: (value) => context
+                  .read<CreateTodoCollectionPageCubit>()
+                  .colorChanged(value),
               decoration: const InputDecoration(labelText: 'Color'),
               validator: (value) {
                 if (value != null && value.isNotEmpty) {
@@ -66,6 +74,7 @@ class _CreateTodoCollectionPageState extends State<CreateTodoCollectionPage> {
               onPressed: () {
                 final isValid = _formKey.currentState?.validate();
                 if (isValid == true) {
+                  context.read<CreateTodoCollectionPageCubit>().submit();
                   context.pop();
                 }
               },

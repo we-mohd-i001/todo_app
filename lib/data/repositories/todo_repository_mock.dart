@@ -75,4 +75,9 @@ class TodoRepositoryMock implements TodoRepository {
       return Left(ServerFailure(stackTrace: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> createTodoCollection(TodoCollection collection) {
+
+  }
 }
