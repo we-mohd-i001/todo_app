@@ -8,7 +8,6 @@ import 'package:todo_app/application/pages/detail/todo_detail_page.dart';
 import 'package:todo_app/application/pages/home/bloc/navigation_todo_cubit.dart';
 import 'package:todo_app/application/pages/overview/overview_page.dart';
 import 'package:todo_app/application/pages/settings/settings_page.dart';
-import 'package:todo_app/domain/entities/unique_id.dart';
 
 class HomePageProvider extends StatelessWidget {
   final String tab;
@@ -109,22 +108,43 @@ class _HomePageState extends State<HomePage> {
                 builder: widget.index != 1
                     ? null
                     : (_) => Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.centerRight,
-                              end: Alignment.centerLeft,
-                              colors: [
-                                Theme.of(context).primaryColor.withOpacity(0.7),
-                                Theme.of(context).primaryColor.withOpacity(0.4),
-                              ],
-                            ),
-                          ),
+                          // decoration: BoxDecoration(
+                          //   gradient: LinearGradient(
+                          //     begin: Alignment.centerRight,
+                          //     end: Alignment.centerLeft,
+                          //     colors: [
+                          //       Theme.of(context).primaryColor.withOpacity(0.7),
+                          //       Theme.of(context).primaryColor.withOpacity(0.4),
+                          //     ],
+                          //   ),
+                          // ),
                           child: BlocBuilder<NavigationTodoCubit,
                               NavigationTodoState>(
                             builder: (context, state) {
+                              final isSecondaryBodyDisplayed =
+                                  Breakpoints.mediumAndUp.isActive(context);
+                              context
+                                  .read<NavigationTodoCubit>()
+                                  .secondaryBodyHasChanged(
+                                      isSecondaryBodyDisplayed:
+                                          isSecondaryBodyDisplayed);
                               final selectedId = state.selectedCollectionId;
                               if (selectedId == null) {
-                                return Container();
+                                return Container(
+                                    decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.centerRight,
+                                    end: Alignment.centerLeft,
+                                    colors: [
+                                      Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(0.7),
+                                      Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(0.4),
+                                    ],
+                                  ),
+                                ));
                               }
                               return TodoDetailPageProvider(
                                 key: Key(selectedId.value),
