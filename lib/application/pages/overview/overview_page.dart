@@ -28,7 +28,7 @@ class OverviewPage extends StatelessWidget {
   static const pageConfig = PageConfig(
       icon: Icons.work_history_rounded,
       name: 'Overview',
-      child: OverViewPageProvider());
+      child: OverviewPage());
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/application/core/go_router_observer.dart';
 import 'package:todo_app/application/pages/create_todo_collection/create_todo_collection_page.dart';
+import 'package:todo_app/application/pages/create_todo_entry/create_todo_entry_page.dart';
 import 'package:todo_app/application/pages/dashboard/dashboard_page.dart';
 import 'package:todo_app/application/pages/detail/todo_detail_page.dart';
 import 'package:todo_app/application/pages/home/bloc/navigation_todo_cubit.dart';
@@ -69,8 +70,37 @@ final routes = GoRouter(
             ),
             title: const Text('Create Todo Collection'),
           ),
-          body: const SafeArea(
-            child: CreateTodoCollectionPageProvider(),
+          body: SafeArea(
+            child: CreateTodoCollectionPage.pageConfig.child,
+          ),
+        ),
+      ),
+      GoRoute(
+        name: CreateTodoEntryPage.pageConfig.name.toLowerCase(),
+        path:
+            '$_basePath/overview/${CreateTodoEntryPage.pageConfig.name.toLowerCase()}',
+        builder: (context, state) => Scaffold(
+          appBar: AppBar(
+            leading: BackButton(
+              onPressed: () {
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.goNamed(
+                    HomePage.pageConfig.name.toLowerCase(),
+                    pathParameters: {
+                      'tab': OverviewPage.pageConfig.name.toLowerCase()
+                    },
+                  );
+                }
+              },
+            ),
+            title: const Text('Create Todo Entry'),
+          ),
+          body: SafeArea(
+            child: CreateTodoEntryPageProvider(
+              collectionId: state.extra as CollectionId,
+            ),
           ),
         ),
       ),

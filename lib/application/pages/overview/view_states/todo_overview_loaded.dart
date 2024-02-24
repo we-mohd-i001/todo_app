@@ -55,6 +55,7 @@ class TodoOverviewLoaded extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomRight,
             child: ElevatedButton.icon(
+              key: const Key('create-todo-entry'),
               onPressed: () {
                 context.pushNamed(
                     CreateTodoCollectionPage.pageConfig.name.toString());

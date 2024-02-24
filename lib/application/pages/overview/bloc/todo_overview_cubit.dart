@@ -13,14 +13,15 @@ class TodoOverviewCubit extends Cubit<TodoOverviewState> {
 
   final LoadTodoCollections loadTodoCollections;
 
-  Future<void> readTodoCollections()async{
+  Future<void> readTodoCollections() async {
     emit(TodoOverviewStateLoading());
-    try{
+    try {
       final collectionsFuture = loadTodoCollections.call(NoParams());
       final collections = await collectionsFuture;
-      if(collections.isLeft){
+      if (collections.isLeft) {
         emit(TodoOverviewStateError());
       } else {
+        print('Overview Pade Loaded State');
         emit(TodoOverviewStateLoaded(collections: collections.right));
       }
     } on Exception {
