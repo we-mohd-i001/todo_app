@@ -28,7 +28,7 @@ class TodoDetailLoaded extends StatelessWidget {
             Align(
               alignment: Alignment.bottomRight,
               child: FloatingActionButton(
-                key: const Key('create-todo-enStry'),
+                key: const Key('create-todo-entry'),
                   child: Icon(CreateTodoEntryPage.pageConfig.icon),
                   onPressed: () {
                     context.pushNamed(

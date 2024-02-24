@@ -77,9 +77,15 @@ class TodoRepositoryMock implements TodoRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> createTodoCollection(TodoCollection collection) {
+  Future<Either<Failure, bool>> createTodoCollection(
+      TodoCollection collection) {
+    final collectionToAdd = TodoCollection(
+        id: CollectionId.fromUniqueString(todoCollections.length.toString()),
+        title: collection.title,
+        color: collection.color);
     todoCollections.add(collection);
-    return Future.delayed(const Duration(milliseconds: 300), ()=> const Right(true));
+    return Future.delayed(
+        const Duration(milliseconds: 100), () => const Right(true));
   }
 
   @override
@@ -90,5 +96,12 @@ class TodoRepositoryMock implements TodoRepository {
     } on Exception catch (e) {
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> createTodoEntry(TodoEntry entry) {
+    todoEntries.add(entry);
+    return Future.delayed(
+        const Duration(milliseconds: 100), () => const Right(true));
   }
 }
