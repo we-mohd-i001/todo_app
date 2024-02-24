@@ -16,8 +16,8 @@ class TodoOverviewCubit extends Cubit<TodoOverviewState> {
   Future<void> readTodoCollections() async {
     emit(TodoOverviewStateLoading());
     try {
-      final collectionsFuture = loadTodoCollections.call(NoParams());
-      final collections = await collectionsFuture;
+      final collectionsFuture = await loadTodoCollections.call(NoParams());
+      final collections = collectionsFuture;
       if (collections.isLeft) {
         emit(TodoOverviewStateError());
       } else {

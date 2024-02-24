@@ -14,8 +14,8 @@ class LoadTodoCollections implements UseCase<List<TodoCollection>, NoParams> {
     try {
       final loadedCollections = todoRepository.readTodoCollections();
 
-      return loadedCollections.fold(
-          (left) => Left(left), (right) => Right(right));
+      return Future.delayed(const Duration(milliseconds: 300),() => loadedCollections.fold(
+          (left) => Left(left), (right) => Right(right)));
     } on Exception catch (e) {
       return Left(
         ServerFailure(stackTrace: e.toString()),

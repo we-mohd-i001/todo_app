@@ -4,6 +4,8 @@ import 'package:todo_app/application/components/todo_entry_item.dart';
 import 'package:todo_app/application/pages/create_todo_entry/create_todo_entry_page.dart';
 import 'package:todo_app/domain/entities/unique_id.dart';
 
+
+
 class TodoDetailLoaded extends StatelessWidget {
   const TodoDetailLoaded(
       {super.key, required this.entryIds, required this.collectionId});
@@ -19,7 +21,7 @@ class TodoDetailLoaded extends StatelessWidget {
         child: Stack(
           children: [
             ListView.builder(
-              itemCount: entryIds.length,
+              itemCount: entryIds.isEmpty ? 0 : entryIds.length ,
               itemBuilder: (context, index) {
                 return TodoEntryItemProvider(
                     collectionId: collectionId, entryId: entryIds[index]);

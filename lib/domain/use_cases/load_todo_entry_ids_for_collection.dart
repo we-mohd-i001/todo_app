@@ -14,9 +14,16 @@ class LoadTodoEntryIdsForCollection
   Future<Either<Failure, List<EntryId>>> call(params) async {
     try {
       final loadedIds = todoRepository.readTodoEntryIds(params.collectionId);
-
-      return loadedIds.fold((left) => Left(left), (right) => Right(right));
+      print(params.collectionId);
+      return loadedIds.fold((left) {
+        print('left from LoadTodoEntryIdsForCollection');
+        return Left(left);
+      }, (right) {
+        print('returned right from LoadTodoEntryIdsForCollection call function');
+        return Right(right);
+      });
     } on Exception catch (e) {
+      print('Exception from LoadTodoEntryIdsForCollection');
       return Left(ServerFailure(stackTrace: e.toString()));
     }
   }
