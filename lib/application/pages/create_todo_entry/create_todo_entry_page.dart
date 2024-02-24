@@ -4,14 +4,28 @@ import 'package:go_router/go_router.dart';
 import 'package:todo_app/application/core/form_value.dart';
 import 'package:todo_app/application/core/page_config.dart';
 import 'package:todo_app/application/pages/create_todo_entry/bloc/create_todo_entry_page_cubit.dart';
-import 'package:todo_app/domain/entities/todo_entry.dart';
 import 'package:todo_app/domain/entities/unique_id.dart';
 import 'package:todo_app/domain/repositories/todo_repository.dart';
 import 'package:todo_app/domain/use_cases/create_todo_entry.dart';
 
+
+typedef TodoEntryItemCallback = Function();
+
+class CreateTodoEntryPageExtra {
+  final CollectionId collectionsId;
+  final TodoEntryItemCallback todoEntryItemCallback;
+
+  CreateTodoEntryPageExtra(
+      {required this.collectionsId, required this.todoEntryItemCallback});
+}
+
 class CreateTodoEntryPageProvider extends StatelessWidget {
   final CollectionId collectionId;
-  const CreateTodoEntryPageProvider({super.key, required this.collectionId});
+  final TodoEntryItemCallback todoEntryItemCallback;
+  const CreateTodoEntryPageProvider(
+      {super.key,
+      required this.collectionId,
+      required this.todoEntryItemCallback});
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +36,15 @@ class CreateTodoEntryPageProvider extends StatelessWidget {
           todoRepository: RepositoryProvider.of<TodoRepository>(context),
         ),
       ),
-      child: const CreateTodoEntryPage(),
+      child: CreateTodoEntryPage(todoEntryItemCallback: todoEntryItemCallback,),
     );
   }
 }
 
 class CreateTodoEntryPage extends StatefulWidget {
-  const CreateTodoEntryPage({super.key});
+  const CreateTodoEntryPage({super.key, required this.todoEntryItemCallback});
+  final TodoEntryItemCallback todoEntryItemCallback;
+
 
   static const pageConfig = PageConfig(
       icon: Icons.add_circle_rounded,
@@ -40,6 +56,7 @@ class CreateTodoEntryPage extends StatefulWidget {
 }
 
 class _CreateTodoEntryPageState extends State<CreateTodoEntryPage> {
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -51,7 +68,7 @@ class _CreateTodoEntryPageState extends State<CreateTodoEntryPage> {
           children: [
             TextFormField(
               onChanged: (value) {
-                final currentValidationState = context
+                context
                     .read<CreateTodoEntryPageCubit>()
                     .descriptionChanged(description: value);
               },
@@ -80,6 +97,8 @@ class _CreateTodoEntryPageState extends State<CreateTodoEntryPage> {
                 final isValid = _formKey.currentState?.validate();
                 if (isValid == true) {
                   context.read<CreateTodoEntryPageCubit>().submit();
+                  widget.todoEntryItemCallback.call();
+                  debugPrint('${widget.todoEntryItemCallback}Submit button pressed and todoEntryItemCallback called');
                   context.pop();
                 }
               },

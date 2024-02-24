@@ -79,30 +79,37 @@ final routes = GoRouter(
         name: CreateTodoEntryPage.pageConfig.name.toLowerCase(),
         path:
             '$_basePath/overview/${CreateTodoEntryPage.pageConfig.name.toLowerCase()}',
-        builder: (context, state) => Scaffold(
-          appBar: AppBar(
-            leading: BackButton(
-              onPressed: () {
-                if (context.canPop()) {
-                  context.pop();
-                } else {
-                  context.goNamed(
-                    HomePage.pageConfig.name.toLowerCase(),
-                    pathParameters: {
-                      'tab': OverviewPage.pageConfig.name.toLowerCase()
-                    },
-                  );
-                }
-              },
+        builder: (context, state) {
+          final castedExtra = state.extra as CreateTodoEntryPageExtra;
+
+          return Scaffold(
+            appBar: AppBar(
+              leading: BackButton(
+                onPressed: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.goNamed(
+                      HomePage.pageConfig.name.toLowerCase(),
+                      pathParameters: {
+                        'tab': OverviewPage.pageConfig.name.toLowerCase()
+                      },
+                    );
+                  }
+                },
+              ),
+              title: const Text('Create Todo Entry'),
             ),
-            title: const Text('Create Todo Entry'),
-          ),
-          body: SafeArea(
-            child: CreateTodoEntryPageProvider(
-              collectionId: state.extra as CollectionId,
+            body: SafeArea(
+              child: CreateTodoEntryPageProvider(
+                collectionId: castedExtra.collectionsId,
+                todoEntryItemCallback: () {
+                  castedExtra.todoEntryItemCallback();
+                },
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
       GoRoute(
           name: TodoDetailPage.pageConfig.name.toLowerCase(),

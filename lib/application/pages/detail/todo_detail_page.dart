@@ -9,7 +9,7 @@ import 'package:todo_app/domain/entities/unique_id.dart';
 import 'package:todo_app/domain/repositories/todo_repository.dart';
 import 'package:todo_app/domain/use_cases/load_todo_entry_ids_for_collection.dart';
 
-typedef TodoEntryItemCallback = Function();
+
 
 class TodoDetailPageProvider extends StatelessWidget {
   final CollectionId collectionId;
