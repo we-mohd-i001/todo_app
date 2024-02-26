@@ -45,14 +45,12 @@ class TodoCollectionParams extends Params {
   List<Object> get props => [collection];
 }
 
-class TodoEntryParams extends Params{
+class TodoEntryParams extends Params {
+  final CollectionId collectionId;
   final TodoEntry entry;
 
-  TodoEntryParams({required this.entry}) : super();
+  TodoEntryParams({required this.entry, required this.collectionId}) : super();
 
   @override
   List<Object> get props => [entry];
-
-
-
 }

@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:todo_app/data/data_sources/interfaces/todo_local_data_source_interface.dart';
 import 'package:todo_app/data/exceptions/exceptions.dart';
 import 'package:todo_app/data/models/todo_collection_model.dart';
