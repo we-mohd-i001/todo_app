@@ -51,11 +51,11 @@ class TodoRepositoryMock implements TodoRepository {
     try {
       final startIndex = int.parse(collectionId.value) * 10;
       int endIndex = startIndex + 10;
-      if(todoEntries.length < endIndex){
+      if (todoEntries.length < endIndex) {
         endIndex = todoEntries.length;
       }
       List<EntryId> entryIds = [];
-      if(startIndex < todoEntries.length){
+      if (startIndex < todoEntries.length) {
         entryIds =
             todoEntries.sublist(startIndex, endIndex).map((e) => e.id).toList();
       }
@@ -78,13 +78,13 @@ class TodoRepositoryMock implements TodoRepository {
       final updateEntry =
           todoEntries[index].copyWith(isDone: !entryToUpdate.isDone);
       todoEntries[index] = updateEntry;
-      return Future.delayed(
-          const Duration(milliseconds: 100), () {
-            print ('updateTodoEntry okay');
-            return Right(updateEntry);
-          });
+      return Future.delayed(const Duration(milliseconds: 100), () {
+        print('updateTodoEntry okay');
+        return Right(updateEntry);
+      });
     } on Exception catch (e) {
-      print('You are getting error from here [update todo entry server failure]');
+      print(
+          'You are getting error from here [update todo entry server failure]');
       return Left(ServerFailure(stackTrace: e.toString()));
     }
   }
@@ -100,8 +100,6 @@ class TodoRepositoryMock implements TodoRepository {
     return Future.delayed(
         const Duration(milliseconds: 200), () => const Right(true));
   }
-
-
 
   @override
   Future<Either<Failure, bool>> createTodoEntry(TodoEntry entry) {
