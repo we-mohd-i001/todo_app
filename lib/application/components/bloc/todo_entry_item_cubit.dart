@@ -44,7 +44,10 @@ class TodoEntryItemCubit extends Cubit<TodoEntryItemState> {
       final updatedEntry = await updateTodoEntry.call(
           TodoEntryIdsParam(collectionId: collectionId, entryId: entryId));
       return updatedEntry.fold((left) => emit(TodoEntryItemStateError()),
-          (right) => emit(TodoEntryItemStateLoaded(todoEntry: right)));
+          (right) {
+        print('TodoEntryItemLoaded state');
+        emit(TodoEntryItemStateLoaded(todoEntry: right));
+      });
     } on Exception {
       emit(TodoEntryItemStateError());
     }

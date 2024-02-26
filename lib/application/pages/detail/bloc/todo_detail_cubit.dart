@@ -22,11 +22,13 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
           .call(CollectionIdParam(collectionId: collectionId));
 
       if (entryIds.isLeft) {
+        print('entry id isLeft');
         emit(TodoDetailStateError());
       } else {
         emit(TodoDetailStateLoaded(entryIds: entryIds.right));
       }
     } on Exception catch (e) {
+      print('Exception');
       emit(TodoDetailStateError());
     }
   }

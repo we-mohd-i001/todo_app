@@ -28,7 +28,7 @@ class OverviewPage extends StatelessWidget {
   static const pageConfig = PageConfig(
       icon: Icons.work_history_rounded,
       name: 'Overview',
-      child: OverViewPageProvider());
+      child: OverviewPage());
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +41,22 @@ class OverviewPage extends StatelessWidget {
             Theme.of(context).primaryColor.withOpacity(0.4),
             Theme.of(context).primaryColor.withOpacity(0.2)
           ])),
-      child: BlocBuilder<TodoOverviewCubit, TodoOverviewState>(
-          builder: (context, state) {
-        if (state is TodoOverviewStateLoading) {
-          return const Center(child: TodoOverviewLoading());
-        } else if (state is TodoOverviewStateLoaded) {
-          return TodoOverviewLoaded(collections: state.collections);
-        } else {
-          return const TodoOverviewError();
-        }
-      }),
+      child: BlocListener<TodoOverviewCubit, TodoOverviewState>(
+        listenWhen: (previous, current) => previous != current,
+        listener: (context, state) {
+          // TODO: implement listener
+        },
+        child: BlocBuilder<TodoOverviewCubit, TodoOverviewState>(
+            builder: (context, state) {
+          if (state is TodoOverviewStateLoading) {
+            return const Center(child: TodoOverviewLoading());
+          } else if (state is TodoOverviewStateLoaded) {
+            return TodoOverviewLoaded(collections: state.collections);
+          } else {
+            return const TodoOverviewError();
+          }
+        }),
+      ),
     );
   }
 }

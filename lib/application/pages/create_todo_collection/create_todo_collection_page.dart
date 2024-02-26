@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/application/core/page_config.dart';
 import 'package:todo_app/application/pages/create_todo_collection/bloc/create_todo_collection_page_cubit.dart';
+import 'package:todo_app/application/pages/overview/bloc/todo_overview_cubit.dart';
 import 'package:todo_app/domain/entities/todo_color.dart';
 import 'package:todo_app/domain/repositories/todo_repository.dart';
 import 'package:todo_app/domain/use_cases/create_todo_collection.dart';
@@ -17,6 +18,7 @@ class CreateTodoCollectionPageProvider extends StatelessWidget {
         createTodoCollection: CreateTodoCollection(
           todoRepository: RepositoryProvider.of<TodoRepository>(context),
         ),
+        todoOverviewCubit: BlocProvider.of<TodoOverviewCubit>(context),
       ),
       child: const CreateTodoCollectionPage(),
     );
@@ -29,7 +31,7 @@ class CreateTodoCollectionPage extends StatefulWidget {
   static const pageConfig = PageConfig(
     icon: Icons.add_task_rounded,
     name: 'create_todo_collection',
-    child: CreateTodoCollectionPage(),
+    child: CreateTodoCollectionPageProvider(),
   );
 
   @override
@@ -79,15 +81,22 @@ class _CreateTodoCollectionPageState extends State<CreateTodoCollectionPage> {
             const SizedBox(
               height: 16,
             ),
-            ElevatedButton(
-              onPressed: () {
-                final isValid = _formKey.currentState?.validate();
-                if (isValid == true) {
-                  context.read<CreateTodoCollectionPageCubit>().submit();
-                  context.pop();
-                }
+            BlocListener<CreateTodoCollectionPageCubit,
+                CreateTodoCollectionPageState>(
+              listener: (context, state) {
+                // TODO: implement listener
               },
-              child: const Text('Save Collection'),
+              child: ElevatedButton(
+                onPressed: () {
+                  final isValid = _formKey.currentState?.validate();
+                  if (isValid == true) {
+                    context.read<CreateTodoCollectionPageCubit>().submit();
+                    //context.;
+                    context.pop();
+                  }
+                },
+                child: const Text('Save Collection'),
+              ),
             ),
           ],
         ),

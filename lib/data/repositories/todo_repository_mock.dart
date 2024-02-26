@@ -46,16 +46,24 @@ class TodoRepositoryMock implements TodoRepository {
 
   @override
   Future<Either<Failure, List<EntryId>>> readTodoEntryIds(
-      CollectionId collectionId) {
+      CollectionId collectionId) async {
+    print('in mock repo $collectionId');
     try {
       final startIndex = int.parse(collectionId.value) * 10;
-      final endIndex = startIndex + 10;
-      final entryIds =
-          todoEntries.sublist(startIndex, endIndex).map((e) => e.id).toList();
+      int endIndex = startIndex + 10;
+      if (todoEntries.length < endIndex) {
+        endIndex = todoEntries.length;
+      }
+      List<EntryId> entryIds = [];
+      if (startIndex < todoEntries.length) {
+        entryIds =
+            todoEntries.sublist(startIndex, endIndex).map((e) => e.id).toList();
+      }
 
-      return Future.delayed(
+      return await Future.delayed(
           const Duration(milliseconds: 300), () => Right(entryIds));
     } on Exception catch (e) {
+      print('Exception : in readTodoEntryIds in mock repo');
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));
     }
   }
@@ -64,21 +72,39 @@ class TodoRepositoryMock implements TodoRepository {
   Future<Either<Failure, TodoEntry>> updateTodoEntry(
       {required CollectionId collectionId, required EntryId entryId}) async {
     try {
+      print(entryId);
       final index = todoEntries.indexWhere((element) => element.id == entryId);
       final entryToUpdate = todoEntries[index];
       final updateEntry =
           todoEntries[index].copyWith(isDone: !entryToUpdate.isDone);
       todoEntries[index] = updateEntry;
-      return Future.delayed(
-          const Duration(milliseconds: 400), () => Right(updateEntry));
+      return Future.delayed(const Duration(milliseconds: 100), () {
+        print('updateTodoEntry okay');
+        return Right(updateEntry);
+      });
     } on Exception catch (e) {
+      print(
+          'You are getting error from here [update todo entry server failure]');
       return Left(ServerFailure(stackTrace: e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, bool>> createTodoCollection(TodoCollection collection) {
-    todoCollections.add(collection);
-    return Future.delayed(const Duration(milliseconds: 300), ()=> const Right(true));
+  Future<Either<Failure, bool>> createTodoCollection(
+      TodoCollection collection) {
+    final collectionToAdd = TodoCollection(
+        id: CollectionId.fromUniqueString(todoCollections.length.toString()),
+        title: collection.title,
+        color: collection.color);
+    todoCollections.add(collectionToAdd);
+    return Future.delayed(
+        const Duration(milliseconds: 200), () => const Right(true));
+  }
+
+  @override
+  Future<Either<Failure, bool>> createTodoEntry(TodoEntry entry) {
+    todoEntries.add(entry);
+    return Future.delayed(
+        const Duration(milliseconds: 100), () => const Right(true));
   }
 }
