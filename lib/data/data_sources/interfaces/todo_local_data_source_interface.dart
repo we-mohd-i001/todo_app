@@ -12,7 +12,7 @@ abstract class TodoLocalDataSourceInterface {
   Future<List<String>> getTodoCollectionIds();
 
   Future<bool> createTodoEntry(
-      {required collectionId, required TodoEntryModel entry});
+      {required String collectionId, required TodoEntryModel entry});
 
   Future<bool> createTodoCollection({required TodoCollectionModel collection});
 

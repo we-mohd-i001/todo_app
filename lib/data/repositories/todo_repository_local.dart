@@ -33,7 +33,7 @@ class TodoRepositoryLocal extends TodoRepository {
       CollectionId collectionId, TodoEntry entry) async {
     try {
       final result = await localDataSource.createTodoEntry(
-          collectionId: collectionId, entry: todoEntryToModel(entry));
+          collectionId: collectionId.value, entry: todoEntryToModel(entry));
       return Right(result);
     } on CacheException catch (e) {
       return Future.value(Left(CacheFailure(stackTrace: e.toString())));
