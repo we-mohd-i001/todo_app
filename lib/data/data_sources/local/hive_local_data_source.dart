@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-import 'dart:html';
-
->>>>>>> add_local_data_source
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import 'package:todo_app/data/data_sources/interfaces/todo_local_data_source_interface.dart';
@@ -66,11 +61,7 @@ class HiveLocalDataSource implements TodoLocalDataSourceInterface {
       {required String collectionId}) async {
     final collectionBox = await _openCollectionBox();
     final collection =
-<<<<<<< HEAD
         (await collectionBox.get(collectionId))?.cast<String, dynamic>();
-=======
-        (await collectionBox.get(collectionId)) as Map<String, dynamic>?;
->>>>>>> add_local_data_source
     if (collection == null) throw EntryNotFoundException();
     final todoCollectionModel = TodoCollectionModel.fromJson(collection);
     return todoCollectionModel;
