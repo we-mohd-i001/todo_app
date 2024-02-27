@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:todo_app/data/data_sources/interfaces/todo_local_data_source_interface.dart';
 import 'package:todo_app/data/exceptions/exceptions.dart';
 import 'package:todo_app/data/models/todo_collection_model.dart';
@@ -11,25 +14,32 @@ class HiveLocalDataSource implements TodoLocalDataSourceInterface {
   bool isInitialized = false;
 
   Future<void> init() async {
-    if (!isInitialized) {
-      todoCollection = await BoxCollection.open(
-        'todo',
-        {'collection', 'entry'},
-        path: './',
-      );
+    Directory appDocDirectory = await getApplicationDocumentsDirectory();
+    Directory('${appDocDirectory.path}/dir').create(recursive: true)
+// The created directory is returned as a Future.
+        .then((Directory directory) async {
+      debugPrint('Path of New Dir: ${directory.path}');
+      if (!isInitialized) {
+        todoCollection = await BoxCollection.open(
+          'todo',
+          {'collection', 'entry'},
+          path: directory.path,
+        );
 
-      isInitialized = true;
-    } else {
-      debugPrint('Hive was already initialized.');
-    }
+        isInitialized = true;
+      } else {
+        debugPrint('Hive was already initialized.');
+      }
+    });
+
   }
 
   Future<CollectionBox<Map>> _openCollectionBox() async {
-    return todoCollection.openBox<Map>('collection');
+    return await todoCollection.openBox<Map>('collection');
   }
 
   Future<CollectionBox<Map>> _openEntryBox() async {
-    return todoCollection.openBox<Map>('entry');
+    return await todoCollection.openBox<Map>('entry');
   }
 
   @override
