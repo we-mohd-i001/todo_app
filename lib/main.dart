@@ -7,11 +7,12 @@ import 'package:todo_app/data/repositories/todo_repository_local.dart';
 import 'package:todo_app/domain/repositories/todo_repository.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final localDataSource = HiveLocalDataSource();
-  await localDataSource.init();
+
+  // final localDataSource = HiveLocalDataSource();
+  // await localDataSource.init();
   runApp(RepositoryProvider<TodoRepository>(
-    create: (context) => TodoRepositoryLocal(localDataSource: localDataSource),
+    create: (context) =>
+        TodoRepositoryLocal(localDataSource: MemoryLocalDataSource()),
     child: const BasicApp(),
   ));
 }
