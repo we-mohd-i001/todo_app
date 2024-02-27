@@ -14,6 +14,7 @@ class TodoOverviewLoaded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final shouldDisplayAddItemButton = Breakpoints.small.isActive(context);
     return Stack(
       children: [
         BlocBuilder<NavigationTodoCubit, NavigationTodoState>(
@@ -50,27 +51,28 @@ class TodoOverviewLoaded extends StatelessWidget {
                 },
               );
             }),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment.bottomRight,
-            child: ElevatedButton.icon(
-              key: const Key('create-todo-entry'),
-              onPressed: () {
-                context.pushNamed(
-                    CreateTodoCollectionPage.pageConfig.name.toString());
-              },
-              icon: Icon(
-                CreateTodoCollectionPage.pageConfig.icon,
+        if (shouldDisplayAddItemButton)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: ElevatedButton.icon(
+                key: const Key('create-todo-entry'),
+                onPressed: () {
+                  context.pushNamed(
+                      CreateTodoCollectionPage.pageConfig.name.toString());
+                },
+                icon: Icon(
+                  CreateTodoCollectionPage.pageConfig.icon,
+                ),
+                label: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Text('Add Collection'),
+                ),
+                //child: Icon(CreateTodoCollectionPage.pageConfig.icon),
               ),
-              label: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: Text('Add Collection'),
-              ),
-              //child: Icon(CreateTodoCollectionPage.pageConfig.icon),
             ),
           ),
-        ),
       ],
     );
   }
